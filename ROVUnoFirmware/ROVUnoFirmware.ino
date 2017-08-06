@@ -32,8 +32,8 @@ char commandBeginString = '$';
 char commandDelimiterString = ',';
 String readPulses = "";
 
-int cameraPitchPin = 10;
-int gripperOpenPin = 11;
+int cameraPitchPin = 11;
+int gripperOpenPin = 13;
 int gripperRotatePin = 12;
 int motorAPin = 14;
 int motorBPin = 15;
@@ -61,10 +61,11 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  readIMU(debug);
   readCommandString(debug);
   setServoPositions();
   setMotorSpeeds();
-  readIMU(debug);
+
   Serial.println("$"); //end character
 }
 
@@ -74,7 +75,6 @@ void readCommandString(boolean debug)
   
   if(Serial.available()>0)
   {
-    
     readPulses = Serial.readStringUntil(commandEndString);
     if(readPulses.indexOf(commandBeginString) < 5)   // found $ sign near beginning 
     {
@@ -83,11 +83,6 @@ void readCommandString(boolean debug)
       {
         pulses[i] = readPulses.substring(0, readPulses.indexOf(commandDelimiterString)).toInt();
         readPulses.remove(0, readPulses.indexOf(commandDelimiterString) + 1);
-        if(debug) 
-        {
-          Serial.print(pulses[i]);
-          Serial.print(" ");
-        }
       }
     }
   }
@@ -95,8 +90,8 @@ void readCommandString(boolean debug)
 
 void setServoPositions()
 {
-  cameraPitch.writeMicroseconds(checkPulse(pulses[4]));
-  gripperOpen.writeMicroseconds(checkPulse(pulses[5]));
+  cameraPitch.writeMicroseconds(checkPulse(pulses[5]));
+  gripperOpen.writeMicroseconds(checkPulse(pulses[4]));
   gripperRotate.writeMicroseconds(checkPulse(pulses[6]));
 }
 

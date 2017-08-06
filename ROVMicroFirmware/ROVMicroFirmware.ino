@@ -51,8 +51,8 @@ void setup()
 void loop()
 {  
   // read information from the ROV 
-  //readIMUfromROV(IMUdata);
-  Serial.println(IMUdata);
+  readIMUfromROV(IMUdata);
+  //Serial.println(IMUdata);
   if(millis() - timestamp > 250)
   {
     readPulses(pulses);
@@ -87,7 +87,10 @@ void sendPulses(boolean toROV, boolean toComputer)
 
 void readIMUfromROV(char *IMUdata)
 {
-  memset(&IMUdata[0], 0, sizeof(IMUdata));
+  if (ROV.available()) {
+    Serial.write(ROV.read());
+  }
+  /*memset(&IMUdata[0], 0, sizeof(IMUdata));
   while(ROV.available()) {
     char c = ROV.read();
     if(c != commandBeginString.charAt(0))
@@ -98,7 +101,7 @@ void readIMUfromROV(char *IMUdata)
     {
       break;  //exit while loop
     }
-  } 
+  } */
 }
 
 
