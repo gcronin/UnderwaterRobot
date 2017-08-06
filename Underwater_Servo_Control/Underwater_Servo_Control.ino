@@ -19,7 +19,7 @@ void loop() {
   // put your main code here, to run repeatedly:
   if(digitalRead(0))
   {
-    gripper.write(90);
+    gripper.write(45);
   }
   else
   {
