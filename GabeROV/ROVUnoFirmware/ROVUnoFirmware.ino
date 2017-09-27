@@ -32,7 +32,7 @@ char commandBeginString = '$';
 char commandDelimiterString = ',';
 String readPulses = "";
 
-int cameraPitchPin = 11;
+int cameraPitchPin = 8;
 int gripperOpenPin = 13;
 int gripperRotatePin = 12;
 int motorAPin = 14;
@@ -44,7 +44,6 @@ int LEDpin = 7;
 Servo cameraPitch, gripperOpen, gripperRotate, motorA, motorB, motorC, motorD;
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
   cameraPitch.attach(cameraPitchPin);
   gripperOpen.attach(gripperOpenPin);
@@ -60,13 +59,10 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   readIMU(debug);
   readCommandString(debug);
   setServoPositions();
   setMotorSpeeds();
-
-  Serial.println("$"); //end character
 }
 
 
@@ -81,7 +77,9 @@ void readCommandString(boolean debug)
       readPulses.remove(0, readPulses.indexOf(commandBeginString)+1);  //strip off up to the intro character
       for(int i = 0; i < 7; i++)
       {
+        // read and store up to the next delimiter
         pulses[i] = readPulses.substring(0, readPulses.indexOf(commandDelimiterString)).toInt();
+        // trim off the part that was just read plus the delimiter
         readPulses.remove(0, readPulses.indexOf(commandDelimiterString) + 1);
       }
     }
@@ -120,6 +118,7 @@ void readIMU(boolean debug)
     Serial.print(imu.pitch);
     Serial.print(" Z: ");
     Serial.print(imu.roll);
+    Serial.println("$"); //end character
   }
   imu.getCalibration(false);
   if(imu.calibrated) digitalWrite(LEDpin, HIGH);

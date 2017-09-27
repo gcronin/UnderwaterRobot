@@ -13,6 +13,8 @@
  *   RC Pitch: 4
  *   RC Roll: 5
  *   RC Gear: 6
+ *   Potentiometer:  A2
+ *   Potentiometer:  A3
  *   
  */
 
@@ -68,8 +70,8 @@ void readPulses(int *pulses)
   pulses[2] = pulseIn(RCPitch, HIGH);
   pulses[3] = pulseIn(RCRoll, HIGH);
   pulses[4] = pulseIn(RCGear, HIGH);
-  pulses[5] = 1500;
-  pulses[6] = 1500;
+  pulses[5] = map(analogRead(A2), 0, 1023, 1000, 2000);
+  pulses[6] = map(analogRead(A3), 0, 1023, 1000, 2000);
 }
 
 void sendPulses(boolean toROV, boolean toComputer)
